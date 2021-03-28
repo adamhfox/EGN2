@@ -1,7 +1,7 @@
 from flask import Flask, Markup
 from flask import render_template
 from flask import request, redirect
-
+import xmpp
 
 '''
 Start script
@@ -216,7 +216,6 @@ def getImportantNumbers():
   
 
 
-  
   
 
   
@@ -438,7 +437,38 @@ def chart():
     values = [10, 9, 8, 7, 6, 4, 7, 8]
     return render_template("./chart.html", values=values, labels=labels, legend=legend)
  
- 
-  
+# Tactical Balitical Missle Messages
+@app.route("/tactical", methods = ["GET", "POST"])
+def tacticalBM():
+    tacticalB = tbm()
     
+    return render_template("./tbm.html", tacticalBM=tacticalB, i = 0)
+  
+
+
+def tbm():
+  ret = [] 
+  for i in range(len(container)):
+    temp = container[i]
+    if 'TBM' in temp.msg:
+        ret.append(temp)
+        
+  return ret
+
+
+def exampleXmpp():
+  # in this example we create an xmpp client that can send and recieve messages connectiong to a gtalk server
+  username = 'username'
+  passwd = 'password'
+  to='name@example.com'
+  msg='hello :)'
+
+
+  client = xmpp.Client('gmail.com')
+  client.connect(server=('talk.google.com',5223))
+  client.auth(username, passwd, 'botty')
+  client.sendInitPresence()
+  message = xmpp.Message(to, msg)
+  message.setAttr('type', 'chat')
+  client.send(message)
     
